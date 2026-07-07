@@ -1,0 +1,34 @@
+# Vust.toml - Vust 全栈项目配置
+
+[project]
+name = "{{ project_name }}"
+version = "0.1.0"
+description = "A Vust full-stack application"
+language = {% if typescript %}"typescript" {% else %} "javascript"{% endif %}
+
+[paths]
+root = "{{ root_path }}"
+frontend = "{{ root_path }}/frontend"
+backend = "{{ root_path }}/backend"
+
+[frontend]
+framework = "vue"
+version = "3.5.39"
+build_command = "pnpm build"
+dev_command = "pnpm dev"
+port = 5173
+
+[backend]
+framework = "axum"  # 或 "actix-web"
+version = "0.8"
+port = {{ backend_port }}{% if database %}
+database = "sqlite"
+database_url = "sqlite:./sqlite.db?mode=rwc"{% endif %}
+
+[build]
+out_dir = "../output"
+clean_before_build = true
+
+[status]
+dependencies_installed = false
+last_build = ""

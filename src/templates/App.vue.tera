@@ -1,0 +1,52 @@
+<template>
+  <div id="app">
+    <h1>Vue + Rust 全栈脚手架</h1>
+    {% raw %}
+     <p>{{ name }}</p>
+     {% endraw %}
+    <div class="backend-status">
+      <span v-if="status === 'loading'">⏳ 正在连接后端...</span>
+      <span v-if="status === 'success'">✅ 后端连接成功</span>
+      <span v-if="status === 'error'">❌ 后端连接失败,等待编译完刷新页面，或检查后端</span>
+    </div>
+    <HelloWorld />;
+  </div>
+
+</template>
+
+<script setup{% if typescript %} lang="ts"{% endif %}>
+import { ref, onMounted } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
+
+const name = '{{project_name}}';
+const status = ref('loading');
+
+onMounted(async () => {
+  try {
+    const res = await fetch('api/hello');
+    console.log(res);
+    if (res.ok) {
+      status.value = 'success';
+    } else {
+      status.value = 'error';
+    }
+  } catch {
+    status.value = 'error';
+  }
+});
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+
+.backend-status {
+  margin: 20px 0;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+</style>
