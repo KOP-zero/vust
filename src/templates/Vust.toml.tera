@@ -14,8 +14,8 @@ backend = "{{ root_path }}/backend"
 [frontend]
 framework = "vue"
 version = "3.5.39"
-build_command = "pnpm build"
-dev_command = "pnpm dev"
+build_command = "bunx --bun vite build"
+dev_command = "bun dev"
 port = 5173
 
 [backend]

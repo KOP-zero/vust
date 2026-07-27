@@ -13,7 +13,7 @@ pub async fn dev(config: &mut VustConfig) -> Result<()> {
         .spawn()?;
     if !config.is_depen_install() {
         println!("📦 首次运行，正在安装前端依赖...");
-        let status = Command::new("pnpm")
+        let status = Command::new("bun")
             .arg("install")
             .current_dir(&config.get_frontend_path())
             .status()
@@ -27,7 +27,7 @@ pub async fn dev(config: &mut VustConfig) -> Result<()> {
         config.save()?;
     }
     //启动前端进程
-    let mut front_process = Command::new("pnpm")
+    let mut front_process = Command::new("bun")
         .arg("dev")
         .current_dir(&config.get_frontend_path())
         .kill_on_drop(true)

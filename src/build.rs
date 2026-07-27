@@ -13,8 +13,11 @@ pub fn 构建rust(config: &VustConfig, output: impl AsRef<Path>) -> Result<()> {
         .context("构建rust失败")?;
     Ok(())
 }
+
 pub fn 构建vue(config: &VustConfig, output: impl AsRef<Path>) -> Result<()> {
-    Command::new("pnpm")
+    Command::new("bunx")
+        .arg("--bun") // 让 Vite 在 Bun 运行时下执行
+        .arg("vite")
         .arg("build")
         .arg("--outDir")
         .arg(output.as_ref())

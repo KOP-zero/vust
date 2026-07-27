@@ -1,9 +1,18 @@
 use crate::cli::NewArg;
 use crate::templates;
-use anyhow::Result;
+use anyhow::{Ok, Result};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
+pub fn 检查环境() -> Result<()> {
+    if let Err(_) = Command::new("cargo").arg("-v").status() {
+        anyhow::bail!("没有安装cargo工具");
+    };
+    if let Err(_) = Command::new("bun").arg("-v").status() {
+        anyhow::bail!("没有安装bun工具");
+    };
+    Ok(())
+}
 pub fn 创建rust项目(arg: &NewArg) -> Result<()> {
     let path: &Path = arg.name.as_ref();
     let src_path = path.join("backend/src");
@@ -19,7 +28,7 @@ pub fn 创建vue项目(arg: &NewArg) -> Result<()> {
     let front_path = path.join("frontend");
     fs::create_dir(&front_path)?;
     let vue = if arg.typescript { "vue-ts" } else { "vue" };
-    Command::new("pnpm")
+    Command::new("bun")
         .args([
             "create",
             "vite",

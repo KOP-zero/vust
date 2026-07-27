@@ -5,11 +5,11 @@ pub mod dev;
 pub mod new;
 pub mod templates;
 use crate::{cli::NewArg, config::VustConfig};
-
 use std::path::Path;
 use tokio::runtime::Builder;
 pub fn new_project(arg: &NewArg) {
     std::fs::create_dir(&arg.name).expect("目录已存在");
+    new::检查环境().expect("环境检查失败");
     if arg.git {
         templates::创建gitignore(&arg.name).unwrap();
         new::创建git(&arg.name).unwrap();
@@ -22,11 +22,13 @@ pub fn new_project(arg: &NewArg) {
     new::创建vue项目(arg).unwrap();
 }
 pub fn dev_start(path: impl AsRef<Path>) {
+    new::检查环境().expect("环境检查失败");
     let mut config = VustConfig::init(path).unwrap();
     let rt = Builder::new_current_thread().enable_all().build().unwrap();
     rt.block_on(async { dev::dev(&mut config).await.unwrap() })
 }
 pub fn build_start(path: impl AsRef<Path>, output: impl AsRef<Path>) {
+    new::检查环境().expect("环境检查失败");
     let config = VustConfig::init(path).unwrap();
     build::构建rust(&config, &output).unwrap();
     build::构建vue(&config, &output).unwrap();
